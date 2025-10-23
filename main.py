@@ -1,19 +1,17 @@
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
-from langchain_cohere import ChatCohere
+# from langchain_cohere import ChatCohere
+from langchain_ollama import ChatOllama
 
 load_dotenv()
 
 def main():
     print("Hello from langchain-course!")
     information="""
-    Avul Pakir Jainulabdeen Abdul Kalam (/ˈʌbdʊl kəˈlɑːm/ ⓘ UB-duul kə-LAHM; 15 October 1931 – 27 July 2015) was an Indian aerospace scientist and statesman who served as the president of India from 2002 to 2007.
+    Margaret Colleen Hoover (née Fennell; born December 11, 1979) is an American author who primarily writes novels in the romance and young adult fiction genres.[3][1] She is best known for her 2016 novel It Ends with Us. Many of her works were self-published before they were picked up by a publishing house. As of October 2022, Hoover has sold approximately 20 million books.[4] She was named one of the 100 most influential people in the world by Time magazine in 2023.[5]
+Early and personal life
 
-Born and raised in a Muslim family in Rameswaram, Tamil Nadu, Kalam studied physics and aerospace engineering. He spent the next four decades as a scientist and science administrator, mainly at the Defence Research and Development Organisation (DRDO) and Indian Space Research Organisation (ISRO) and was intimately involved in India's civilian space programme and military missile development efforts. He was known as the "Missile Man of India" for his work on the development of ballistic missile and launch vehicle technology. He also played a pivotal organisational, technical, and political role in Pokhran-II nuclear tests in 1998, India's second such test after the first test in 1974.
-
-Kalam was elected as the president of India in 2002 with the support of both the ruling Bharatiya Janata Party and the then-opposition Indian National Congress. He was widely referred to as the "People's President". He engaged in teaching, writing and public service after his presidency. He was a recipient of several awards, including the Bharat Ratna, India's highest civilian honour.
-
-While delivering a lecture at IIM Shillong, Kalam collapsed and died from an apparent cardiac arrest on 27 July 2015, aged 83. Thousands attended the funeral ceremony held in his hometown of Rameswaram, where he was buried with full state honours. A memorial was inaugurated near his home town in 2017.
+Hoover was born on December 11, 1979,[6] in Sulphur Springs, Texas, to Vannoy Fite[1] and Eddie Fennell. She grew up in Saltillo, Texas,[7] and she graduated from Saltillo High School in 1998.[8] She married Heath Hoover in 2000,[9] and they have three sons.[10] She graduated from Texas A&M University–Commerce with a degree in social work.[11] She worked in various social work and teaching jobs before she started her career as an author.[12] 
     """
     summary_template=f"""
     given the information {information} about a person, I want you to create:
@@ -22,11 +20,11 @@ While delivering a lecture at IIM Shillong, Kalam collapsed and died from an app
     """
 
     summary_prompt_template = PromptTemplate(
-        input_variables={"information"}, template=summary_template
+        input_variables=["information"], template=summary_template
     )
 
-    # llm = ChatCohere(temperature=0, model="command-a-03-2025")
-    llm = ChatOllama(temperature=0, model)
+    llm = ChatCohere(temperature=0, model="command-a-03-2025")
+    # llm = ChatOllama(temperature=0, model="gpt-oss:120b-cloud")
     chain = summary_prompt_template | llm
     response = chain.invoke(input = {"information" : information})
     print(response.content)
